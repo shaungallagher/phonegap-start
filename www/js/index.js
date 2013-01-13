@@ -61,22 +61,26 @@ var app = {
 var login = {
     action: function() {
         app.report('login.action');
-        // Determine whether the user is logged in
         var device_id = device && device.uuid;
         var update_id = window.localStorage.getItem("update_id");
         if (device_id) {
-            var jqxhr = $.get('http://www.granniephone.com/api/?action=login&device_id=' +
-                device_id + '&update_id=' + update_id, function(data) {
-                    app.report('login.action success: ' + data);
-            }).error(function() {
-                app.report('login.action error');
+            app.report('device_id: ' + device_id);
+            $.ajax({
+                url: 'http://www.granniephone.com/api/?action=login&device_id=' +
+                    device_id + '&update_id=' + update_id,
+                dataType: 'jsonp',
+                jsonp: 'jsoncallback',
+                timeout: 3000,
+                success: function(data, status) {
+                    app.report('login.action success: ' + data.response);
+                },
+                error: function() {
+                   app.report('login.action error');
+                }
             });
         } else {
-            login.unsuccess();
+            app.report('login !device_id');
         }
-    },
-    unsuccess: function() {
-        app.report('login.unsuccess');
     }
 };
 
