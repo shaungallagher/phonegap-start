@@ -26,11 +26,13 @@ app.jqmReadyDeferred = null;
 
 app.initialize = function () {
     console.log('initialize');
+    alert('initialize');
     app.bind();
 };
 
 app.bind = function () {
     console.log('bind');
+    alert('bind');
 
     app.deviceReadyDeferred = $.Deferred();
 
@@ -47,11 +49,13 @@ app.bind = function () {
 };
 
 app.deviceIsReady = function () {
+    alert('deviceIsReady');
     app.deviceReadyDeferred.resolve();
 };
 
 app.deviceready = function () {
     app.report('deviceready');
+    alert('deviceReady');
     if (device && device.uuid) {
         app.report('device.uuid: ' + device.uuid);
         app.login();
@@ -68,7 +72,8 @@ app.report = function (id) {
 };
 
 app.login = function () {
-    app.report('login.action');
+    app.report('login');
+    alert('login');
     var device_id = device && device.uuid;
     var update_id = window.localStorage.getItem("update_id");
     $.ajax({
@@ -77,10 +82,12 @@ app.login = function () {
         dataType: 'jsonp',
         timeout: 3000,
         success: function (data, status) {
-            app.report('login.action success: ' + data.response);
+            alert('success');
+            app.report('login success: ' + data.response);
         },
         error: function () {
-            app.report('login.action error');
+            alert('error');
+            app.report('login error');
         }
     });
 };
