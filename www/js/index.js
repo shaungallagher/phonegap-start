@@ -1,3 +1,5 @@
+/*jslint debug: true, browser: true, devel: true */
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,57 +18,54 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
-    initialize: function() {
-        console.log('initialize');
-        this.bind();
-    },
-    bind: function() {
-        console.log('bind');
 
-        var deviceReadyDeferred = $.Deferred();
-        var jqmReadyDeferred = $.Deferred();
+var app = {};
 
-        document.addEventListener("deviceReady", deviceReady, false);
+app.initialize = function () {
+    console.log('initialize');
+    app.bind();
+};
 
-        function deviceReady() {
-            deviceReadyDeferred.resolve();
-        }
+app.bind = function () {
+    console.log('bind');
 
-        $(document).one("mobileinit", function () {
-            jqmReadyDeferred.resolve();
-        });
+    var deviceReadyDeferred = $.Deferred();
+    var jqmReadyDeferred = $.Deferred();
 
-        $.when(deviceReadyDeferred, jqmReadyDeferred).then(doWhenBothFrameworksLoaded);
-
-        function doWhenBothFrameworksLoaded() {
-            this.deviceready;
-        }
-    },
-    deviceready: function() {
-        console.log('deviceready');
-        // This is an event handler function, which means the scope is the event.
-        // So, we must explicitly called `app.report()` instead of `this.report()`.
-        app.report('deviceready');
-        if (device && device.uuid) {
-            app.report('device.uuid: ' + device.uuid);
-        } else {
-            app.report('!device.uuid');
-        }
-        app.login.action();
-    },
-    report: function(id) {
-        // Report the event in the console
-        console.log("Report: " + id);
-
-        // Toggle the state from "pending" to "complete" for the reported ID.
-        // Accomplished by adding .hide to the pending element and removing
-        // .hide from the complete element.
-        var c = $('#console');
-        var p = $('<p>' + id + '</p>');
-        $(c).append(p);
+    function deviceReady() {
+        deviceReadyDeferred.resolve();
     }
-    // findBetty: function() {
+
+    function doWhenBothFrameworksLoaded() {
+        app.deviceready();
+    }
+
+    document.addEventListener("deviceReady", deviceReady, false);
+
+    $(document).one("mobileinit", function () {
+        jqmReadyDeferred.resolve();
+    });
+
+    $.when(deviceReadyDeferred, jqmReadyDeferred).then(doWhenBothFrameworksLoaded);
+
+};
+
+app.deviceready = function () {
+    app.report('deviceready');
+    if (device && device.uuid) {
+        app.report('device.uuid: ' + device.uuid);
+        app.login();
+    } else {
+        app.report('!device.uuid');
+    }
+};
+
+app.report = function (id) {
+    console.log("Report: " + id);
+    var c = $('#console');
+    var p = $('<p>' + id + '</p>');
+    $(c).append(p);
+    // findBetty: function () {
     //     console.log('findBetty 2');
     //     var options = new ContactFindOptions();
     //     options.filter = "Betty";
@@ -75,41 +74,40 @@ var app = {
     // }
 };
 
-app.login = {
-    action: function() {
-        app.report('login.action');
-        var device_id = device && device.uuid;
-        var update_id = window.localStorage.getItem("update_id");
-        if (device_id) {
-            $.ajax({
-                url: 'http://www.granniephone.com/api/?action=login&device_id=' +
-                    device_id + '&update_id=' + update_id + '&callback=?',
-                dataType: 'jsonp',
-                jsonp: 'jsoncallback',
-                timeout: 3000,
-                success: function(data, status) {
-                    app.report('login.action success: ' + data.response);
-                },
-                error: function() {
-                   app.report('login.action error');
-                }
-            });
-        } else {
-            app.report('login !device_id');
-        }
+app.login = function () {
+    app.report('login.action');
+    var device_id = device && device.uuid;
+    var update_id = window.localStorage.getItem("update_id");
+    if (device_id) {
+        $.ajax({
+            url: 'http://www.granniephone.com/api/?action=login&device_id=' +
+                device_id + '&update_id=' + update_id + '&callback=?',
+            dataType: 'jsonp',
+            jsonp: 'jsoncallback',
+            timeout: 3000,
+            success: function (data, status) {
+                app.report('login.action success: ' + data.response);
+            },
+            error: function () {
+                app.report('login.action error');
+            }
+        });
+    } else {
+        app.report('login !device_id');
     }
 };
 
-// var onSuccess = function(contacts) {
+
+// var onSuccess = function (contacts) {
 //     console.log('onSuccess contacts: ', contacts);
-//     navigator.notification.alert('onSuccess!', function() {}, 'Title');
+//     navigator.notification.alert('onSuccess!', function () {}, 'Title');
 //     for (var i=0; i<contacts.length; i++) {
 //         document.body.appendChild('<p style="background-color:#0F0">' + contacts[i].displayName +
 //             ', <a href="tel:' + contacts[i].phoneNumbers[0] + '</p>');
 //     }
 // };
 
-// var onError = function(e) {
+// var onError = function (e) {
 //     console.log('onError');
 //     var contact = navigator.contacts.create();
 //     var tContactName = new ContactName();
@@ -122,10 +120,10 @@ app.login = {
 //     phoneNumbers.push(tPhoneNumber);
 //     console.log('phoneNumbers[0].value: ', phoneNumbers[0].value);
 //     contact.phoneNumbers = phoneNumbers;
-//     contact.save(function(contact) {
-//        navigator.notification.alert('Saved successfully!!!', function(){}, 'Title');
-//     }, function(contactError) {
-//        navigator.notification.alert('Error contact save: ' + contactError.code, function(){}, 'Title');
+//     contact.save(function (contact) {
+//        navigator.notification.alert('Saved successfully!!!', function (){}, 'Title');
+//     }, function (contactError) {
+//        navigator.notification.alert('Error contact save: ' + contactError.code, function (){}, 'Title');
 //     });
 // };
 
