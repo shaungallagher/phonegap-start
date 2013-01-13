@@ -35,7 +35,7 @@ var app = {
         } else {
             app.report('!device.uuid');
         }
-        login.action();
+        app.login.action();
     },
     report: function(id) {
         // Report the event in the console
@@ -44,10 +44,9 @@ var app = {
         // Toggle the state from "pending" to "complete" for the reported ID.
         // Accomplished by adding .hide to the pending element and removing
         // .hide from the complete element.
-        var c = document.getElementById('console');
-        var p = document.createElement('p');
-        p.innerHTML = id;
-        c.appendChild(p);
+        var c = $('#console');
+        var p = $('<p>' + id + '</p>');
+        $(c).append(p);
     }
     // findBetty: function() {
     //     console.log('findBetty 2');
@@ -58,16 +57,15 @@ var app = {
     // }
 };
 
-var login = {
+app.login = {
     action: function() {
         app.report('login.action');
         var device_id = device && device.uuid;
         var update_id = window.localStorage.getItem("update_id");
         if (device_id) {
-            app.report('device_id: ' + device_id);
             $.ajax({
                 url: 'http://www.granniephone.com/api/?action=login&device_id=' +
-                    device_id + '&update_id=' + update_id,
+                    device_id + '&update_id=' + update_id + '&callback=?',
                 dataType: 'jsonp',
                 jsonp: 'jsoncallback',
                 timeout: 3000,
