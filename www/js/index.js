@@ -23,7 +23,25 @@ var app = {
     },
     bind: function() {
         console.log('bind');
-        document.addEventListener('deviceready', this.deviceready, false);
+
+        var deviceReadyDeferred = $.Deferred();
+        var jqmReadyDeferred = $.Deferred();
+
+        document.addEventListener("deviceReady", deviceReady, false);
+
+        function deviceReady() {
+            deviceReadyDeferred.resolve();
+        }
+
+        $(document).one("mobileinit", function () {
+            jqmReadyDeferred.resolve();
+        });
+
+        $.when(deviceReadyDeferred, jqmReadyDeferred).then(doWhenBothFrameworksLoaded);
+
+        function doWhenBothFrameworksLoaded() {
+            this.deviceready;
+        }
     },
     deviceready: function() {
         console.log('deviceready');
