@@ -32,7 +32,7 @@ app.bind = function () {
     var deviceReadyDeferred = $.Deferred();
     var jqmReadyDeferred = $.Deferred();
 
-    function deviceReady() {
+    function deviceIsReady() {
         deviceReadyDeferred.resolve();
     }
 
@@ -40,7 +40,7 @@ app.bind = function () {
         app.deviceready();
     }
 
-    document.addEventListener("deviceReady", deviceReady, false);
+    document.addEventListener("deviceReady", deviceIsReady, false);
 
     $(document).one("mobileinit", function () {
         jqmReadyDeferred.resolve();
@@ -78,23 +78,18 @@ app.login = function () {
     app.report('login.action');
     var device_id = device && device.uuid;
     var update_id = window.localStorage.getItem("update_id");
-    if (device_id) {
-        $.ajax({
-            url: 'http://www.granniephone.com/api/?action=login&device_id=' +
-                device_id + '&update_id=' + update_id + '&callback=?',
-            dataType: 'jsonp',
-            jsonp: 'jsoncallback',
-            timeout: 3000,
-            success: function (data, status) {
-                app.report('login.action success: ' + data.response);
-            },
-            error: function () {
-                app.report('login.action error');
-            }
-        });
-    } else {
-        app.report('login !device_id');
-    }
+    $.ajax({
+        url: 'http://www.granniephone.com/api/?action=login&device_id=' +
+            device_id + '&update_id=' + update_id,
+        dataType: 'jsonp',
+        timeout: 3000,
+        success: function (data, status) {
+            app.report('login.action success: ' + data.response);
+        },
+        error: function () {
+            app.report('login.action error');
+        }
+    });
 };
 
 
