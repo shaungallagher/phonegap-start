@@ -21,6 +21,9 @@
 
 var app = {};
 
+app.deviceReadyDeferred = null;
+app.jqmReadyDeferred = null;
+
 app.initialize = function () {
     console.log('initialize');
     app.bind();
@@ -29,25 +32,22 @@ app.initialize = function () {
 app.bind = function () {
     console.log('bind');
 
-    var deviceReadyDeferred = $.Deferred();
-    var jqmReadyDeferred = $.Deferred();
+    app.deviceReadyDeferred = $.Deferred();
 
-    function deviceIsReady() {
-        deviceReadyDeferred.resolve();
-    }
+    app.jqmReadyDeferred = $.Deferred();
 
-    function doWhenBothFrameworksLoaded() {
-        app.deviceready();
-    }
-
-    document.addEventListener("deviceReady", deviceIsReady, false);
+    document.addEventListener("deviceReady", app.deviceIsReady, false);
 
     $(document).one("mobileinit", function () {
-        jqmReadyDeferred.resolve();
+        app.jqmReadyDeferred.resolve();
     });
 
-    $.when(deviceReadyDeferred, jqmReadyDeferred).then(doWhenBothFrameworksLoaded);
+    $.when(app.deviceReadyDeferred, app.jqmReadyDeferred).then(app.deviceready);
 
+};
+
+app.deviceIsReady = function () {
+    app.deviceReadyDeferred.resolve();
 };
 
 app.deviceready = function () {
@@ -65,13 +65,6 @@ app.report = function (id) {
     var c = $('#console');
     var p = $('<p>' + id + '</p>');
     $(c).append(p);
-    // findBetty: function () {
-    //     console.log('findBetty 2');
-    //     var options = new ContactFindOptions();
-    //     options.filter = "Betty";
-    //     var fields = ["displayName", "name"];
-    //     navigator.contacts.find(fields, onSuccess, onError, options);
-    // }
 };
 
 app.login = function () {
@@ -92,6 +85,14 @@ app.login = function () {
     });
 };
 
+
+// findBetty: function () {
+//     console.log('findBetty 2');
+//     var options = new ContactFindOptions();
+//     options.filter = "Betty";
+//     var fields = ["displayName", "name"];
+//     navigator.contacts.find(fields, onSuccess, onError, options);
+// }
 
 // var onSuccess = function (contacts) {
 //     console.log('onSuccess contacts: ', contacts);
