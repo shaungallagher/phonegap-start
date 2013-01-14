@@ -65,8 +65,9 @@ app.login = function () {
             }
             else if (data.response != 'up to date') {
                 app.updateDB(data);
+            } else {
+                app.fromDB();
             }
-            app.fromDB();
         },
         error: function () {
             app.report('API login error');
@@ -104,6 +105,7 @@ app.updateDB = function (data) {
 
     var successDB = function () {
         app.report('app.updateDB - success!');
+        app.fromDB();
     };
 
     window.localStorage.setItem('update_id', data.update_id);
