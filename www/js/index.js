@@ -83,6 +83,7 @@ app.login = function () {
 app.updateDB = function (data) {
 
     var populateDB = function (tx) {
+        app.report('app.updateDB - populateDB');
         tx.executeSql('DROP TABLE IF EXISTS data');
         tx.executeSql('CREATE TABLE IF NOT EXISTS data ' +
             '(id integer primary key autoincrement, device_id, item, key, value)');
@@ -93,7 +94,7 @@ app.updateDB = function (data) {
             properties = Object.getOwnPropertyNames(item);
             for (j = 0; j < properties.length; j++) {
                 property = properties[j];
-                tx.executeSql('INSERT INTO data (device_id, item, key, value) VALUES (?,?,?)',
+                tx.executeSql('INSERT INTO data (device_id, item, key, value) VALUES (?,?,?,?)',
                     [app.device_id, i, property, item[property]]);
             }
         }
@@ -108,6 +109,8 @@ app.updateDB = function (data) {
         app.fromDB();
     };
 
+    app.report('app.updateDB');
+    app.report('data.items.length: ' + data.items.length);
     window.localStorage.setItem('update_id', data.update_id);
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
     db.transaction(populateDB, errorDB, successDB);
@@ -121,7 +124,7 @@ app.updateDB = function (data) {
 app.fromDB = function () {
 
     var queryDB = function () {
-        tx.executeSql('SELECT * FROM data WHERE device_id = ?', [app.device_id],
+        tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
             querySuccess, errorDB);
     };
 
