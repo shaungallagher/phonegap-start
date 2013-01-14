@@ -125,11 +125,11 @@ app.fromDB = function () {
 
     var queryDB = function (tx) {
         tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
-            querySuccess, errorDB);
+            querySuccess, queryError);
     };
 
     var errorDB = function (err) {
-        app.report('app.fromDB - Error processing SQL: ' + err.code + ', ' + err.message);
+        app.report('app.fromDB - errorDB: ' + err.code + ', ' + err.message);
     };
 
     var querySuccess = function (tx, results) {
@@ -141,8 +141,13 @@ app.fromDB = function () {
         }
     };
 
+    var queryError = function(err) {
+        app.report('app.fromDB - queryError: ' + err.code + ', ' + err.message);
+    };
+
+    app.report('app.fromDB');
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
-    db.transaction(queryDB, errorDB, successDB);
+    db.transaction(queryDB, errorDB);
 
 };
 
