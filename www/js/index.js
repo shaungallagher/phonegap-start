@@ -6,7 +6,7 @@ var app = {};
 /**
  * The device ID.
  */
-var app.device_id;
+app.device_id = null;
 
 
 /**
