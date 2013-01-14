@@ -101,7 +101,7 @@ app.updateDB = function (data) {
     };
 
     var errorDB = function (err) {
-        app.report('app.updateDB - Error processing SQL: ' + err.code);
+        app.report('app.updateDB - Error processing SQL: ' + err.code + ', ' + err.message);
     };
 
     var successDB = function () {
@@ -124,12 +124,12 @@ app.updateDB = function (data) {
 app.fromDB = function () {
 
     var queryDB = function () {
-        tx.executeSql('SELECT `item`, `key`, `value` FROM data WHERE device_id=?', [app.device_id],
+        tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
             querySuccess, errorDB);
     };
 
     var errorDB = function (err) {
-        app.report('app.fromDB - Error processing SQL: ' + err.code);
+        app.report('app.fromDB - Error processing SQL: ' + err.code + ', ' + err.message);
     };
 
     var querySuccess = function (tx, results) {
