@@ -2,8 +2,12 @@
 
 var app = {};
 
-app.deviceReadyDeferred = null;
-app.jqmReadyDeferred = null;
+app.report = function (id) {
+    console.log("Report: " + id);
+    var c = $('#console');
+    var p = $('<p>' + id + '</p>');
+    $(c).append(p);
+};
 
 app.initialize = function () {
     console.log('initialize');
@@ -14,27 +18,7 @@ app.initialize = function () {
 app.bind = function () {
     console.log('bind');
     alert('bind');
-
-    $('#console').append('<p>testing jQuery</p>');
-
-    app.deviceReadyDeferred = $.Deferred();
-
-    app.jqmReadyDeferred = $.Deferred();
-
-    document.addEventListener("deviceReady", app.deviceIsReady, false);
-
-    $(document).one("mobileinit", function () {
-        alert('jqmReadyDeferred.resolve');
-        app.jqmReadyDeferred.resolve();
-    });
-
-    $.when(app.deviceReadyDeferred, app.jqmReadyDeferred).then(app.deviceready);
-
-};
-
-app.deviceIsReady = function () {
-    alert('deviceIsReady');
-    app.deviceReadyDeferred.resolve();
+    document.addEventListener("deviceReady", app.deviceready, false);
 };
 
 app.deviceready = function () {
@@ -46,13 +30,6 @@ app.deviceready = function () {
     } else {
         app.report('!device.uuid');
     }
-};
-
-app.report = function (id) {
-    console.log("Report: " + id);
-    var c = $('#console');
-    var p = $('<p>' + id + '</p>');
-    $(c).append(p);
 };
 
 app.login = function () {
