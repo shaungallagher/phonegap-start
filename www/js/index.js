@@ -59,7 +59,11 @@ app.login = function () {
         timeout: 3000,
         success: function (data, status) {
             app.report('login success: ' + data.response);
-            if (data.response != 'up to date') {
+            if (data.response == 'account_id not found') {
+                app.report('app.login: ' + data.response);
+                return false;
+            }
+            else if (data.response != 'up to date') {
                 app.updateDB(data);
             }
             app.fromDB();
