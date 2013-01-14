@@ -146,7 +146,7 @@ app.fromDB = function () {
                 app.items[item][key] = value;
             }
         }
-        app.drawItems();
+        //app.drawItems();
     };
 
     var queryError = function(err) {
@@ -169,28 +169,28 @@ app.fromDB = function () {
 };
 
 
-/**
- * Loop through app.items and draw items on the screen.
- */
-app.drawItems = function () {
-    app.report('drawItems');
-    var i, itembox;
-    for (i = 0; i < app.items.length; i++) {
-        itembox = $('<div></div>');
-        $(itembox).addClass('itembox itembox-' + i);
-        $(itembox).attr('data-type', app.items.type);
-        $(itembox).append('<p>' + app.items.type + '</p>');
-        if (app.items.name) {
-            $(itembox).attr('data-name', app.items.name);
-            $(itembox).append('<p>' + app.items.name + '</p>');
-        }
-        if (app.items.number) {
-            $(itembox).attr('data-numbername', app.items.numbername);
-            $(itembox).append('<p>' + app.items.number + '</p>');
-        }
-        $('body').append(itembox);
-    }
-};
+// /**
+//  * Loop through app.items and draw items on the screen.
+//  */
+// app.drawItems = function () {
+//     app.report('drawItems');
+//     var i, itembox;
+//     for (i = 0; i < app.items.length; i++) {
+//         itembox = $('<div></div>');
+//         $(itembox).addClass('itembox itembox-' + i);
+//         $(itembox).attr('data-type', app.items.type);
+//         $(itembox).append('<p>' + app.items.type + '</p>');
+//         if (app.items.name) {
+//             $(itembox).attr('data-name', app.items.name);
+//             $(itembox).append('<p>' + app.items.name + '</p>');
+//         }
+//         if (app.items.number) {
+//             $(itembox).attr('data-numbername', app.items.numbername);
+//             $(itembox).append('<p>' + app.items.number + '</p>');
+//         }
+//         $('body').append(itembox);
+//     }
+// };
 
 
 // findBetty: function () {
