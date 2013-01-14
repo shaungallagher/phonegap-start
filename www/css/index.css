@@ -70,3 +70,13 @@ body {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+.itembox {
+    background-color: rgba(120, 175, 211, 0.3);
+    float: left;
+    margin: 1%;
+    padding: 1%;
+    width: 48%;
+    height: 30%;
+    text-align:center;
+}
