@@ -136,8 +136,10 @@ app.fromDB = function () {
         app.report('app.fromDB - success!');
         var len = results.rows.length;
         app.report('Results length: ' + len);
+        app.report('stringify results.rows: ' + JSON.stringify(results.rows));
         for (var i = 0; i < len; i++) {
-            app.report('i: ' + i + ', type: ' + results.rows.item(i).type);
+            app.report('i: ' + i + ', key: ' + results.rows.item(i).key +
+                       ', value: ' + results.rows.item(i).value);
         }
     };
 
