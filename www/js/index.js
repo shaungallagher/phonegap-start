@@ -123,7 +123,7 @@ app.updateDB = function (data) {
  */
 app.fromDB = function () {
 
-    var queryDB = function () {
+    var queryDB = function (tx) {
         tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
             querySuccess, errorDB);
     };
@@ -142,7 +142,7 @@ app.fromDB = function () {
     };
 
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
-    db.transaction(queryDB, errorDB);
+    db.transaction(queryDB, errorDB, successDB);
 
 };
 
