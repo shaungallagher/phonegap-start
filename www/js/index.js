@@ -10,6 +10,13 @@ app.device_id = null;
 
 
 /**
+ * The touch items that appear as options in the app.
+ * @type {Array}
+ */
+app.items = [];
+
+
+/**
  * Output data to both console.log and the DOM.
  * @param  {string} data The data to output.
  */
@@ -136,11 +143,21 @@ app.fromDB = function () {
         app.report('app.fromDB - success!');
         var len = results.rows.length;
         app.report('Results length: ' + len);
-        app.report('stringify results.rows: ' + JSON.stringify(results.rows));
+        var item, key, value;
         for (var i = 0; i < len; i++) {
-            app.report('i: ' + i + ', key: ' + results.rows.item(i).key +
-                       ', value: ' + results.rows.item(i).value);
+            item = results.rows.item(i).item;
+            key = results.rows.item(i).key;
+            value = results.rows.item(i).value;
+            app.report('item: ' + item + ', key: ' + key + ', value: ' + value;
+
+            if (item && key && value) {
+                if (typeof app.items[item] != 'object') {
+                    app.items[item] = {};
+                }
+                app.items[item][key] = value;
+            }
         }
+        app.drawItems();
     };
 
     var queryError = function(err) {
@@ -153,6 +170,30 @@ app.fromDB = function () {
 
 };
 
+
+/**
+ * Loop through app.items and draw items on the screen.
+ */
+app.drawItems = function() {
+    app.report('drawItems');
+    document.body.innerHTML = '';
+    var itembox;
+    for (var i = 0; i < app.items.length; i++) {
+        itembox = document.createElement('div');
+        itembox.className = 'itembox itembox-' + i;
+        itembox.setAttribute('data-type', app.items.type);
+        $(itembox).append('<p>' + app.items.type + '</p>');
+        if (app.items.name) {
+            itembox.setAttribute('data-name', app.items.name);
+            $(itembox).append('<p>' + app.items.name + '</p>');
+        }
+        if (app.items.number) {
+            itembox.setAttribute('data-numbername', app.items.numbername);
+            $(itembox).append('<p>' + app.items.number + '</p>');
+        }
+        $(body).append(itembox);
+    }
+};
 
 
 // findBetty: function () {
