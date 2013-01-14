@@ -174,10 +174,11 @@ app.fromDB = function () {
  */
 app.drawItems = function () {
     app.report('drawItems');
+    app.report('app.items.length: ', app.items.length);
     var i, itembox;
     for (i = 0; i < app.items.length; i++) {
-        itembox = $('<div></div>');
-        $(itembox).addClass('itembox itembox-' + i);
+        itembox = $('<div class="itembox"></div>');
+        $(itembox).addClass('itembox-' + i);
         $(itembox).attr('data-type', app.items.type);
         $(itembox).append('<p>' + app.items.type + '</p>');
         if (app.items.name) {
@@ -188,7 +189,7 @@ app.drawItems = function () {
             $(itembox).attr('data-numbername', app.items.numbername);
             $(itembox).append('<p>' + app.items.number + '</p>');
         }
-        $('body').append(itembox);
+        $('#console').append(itembox);
     }
 };
 
