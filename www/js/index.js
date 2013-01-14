@@ -139,9 +139,9 @@ app.fromDB = function () {
             value = results.rows.item(i).value;
             app.report('item: ' + item + ', key: ' + key + ', value: ' + value);
 
-            if (item && key && value) {
-                if (typeof app.items[item] !== 'object') {
-                    app.items[item] = {};
+            if (key && value) {
+                if (!app.items[item] || typeof app.items[item] !== 'object') {
+                    app.items[item] = { type: '' };
                 }
                 app.items[item][key] = value;
             }
@@ -179,15 +179,15 @@ app.drawItems = function () {
     for (i = 0; i < app.items.length; i++) {
         itembox = $('<div class="itembox"></div>');
         $(itembox).addClass('itembox-' + i);
-        $(itembox).attr('data-type', app.items.type);
-        $(itembox).append('<p>' + app.items.type + '</p>');
-        if (app.items.name) {
-            $(itembox).attr('data-name', app.items.name);
-            $(itembox).append('<p>' + app.items.name + '</p>');
+        $(itembox).attr('data-type', app.items[i].type);
+        $(itembox).append('<p>' + app.items[i].type + '</p>');
+        if (app.items[i].name) {
+            $(itembox).attr('data-name', app.items[i].name);
+            $(itembox).append('<p>' + app.items[i].name + '</p>');
         }
-        if (app.items.number) {
-            $(itembox).attr('data-numbername', app.items.numbername);
-            $(itembox).append('<p>' + app.items.number + '</p>');
+        if (app.items[i].number) {
+            $(itembox).attr('data-number', app.items[i].number);
+            $(itembox).append('<p>' + app.items[i].number + '</p>');
         }
         $('#console').append(itembox);
     }
