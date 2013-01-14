@@ -179,6 +179,15 @@ app.drawItems = function () {
     for (i = 0; i < app.items.length; i++) {
         itembox = $('<div class="itembox"></div>');
         $(itembox).addClass('itembox-' + i);
+
+        if (app.items[i].type == 'dial') {
+            app.items[i].number = '';
+        }
+
+        $(itembox).bind('tap', function() {
+            window.location = 'tel: ' + app.items[i].number;
+        });
+
         $(itembox).attr('data-type', app.items[i].type);
         $(itembox).append('<p>' + app.items[i].type + '</p>');
         if (app.items[i].name) {
