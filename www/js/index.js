@@ -86,7 +86,7 @@ app.updateDB = function (data) {
         app.report('app.updateDB - populateDB');
         tx.executeSql('DROP TABLE IF EXISTS data');
         tx.executeSql('CREATE TABLE IF NOT EXISTS data ' +
-            '(id integer primary key autoincrement, device_id, item, key, value)');
+            '(`id` integer primary key autoincrement, `device_id`, `item`, `key`, `value`)');
 
         var item, properties, j, property;
         for (var i = 0; i < data.items.length; i++) {
@@ -94,7 +94,7 @@ app.updateDB = function (data) {
             properties = Object.getOwnPropertyNames(item);
             for (j = 0; j < properties.length; j++) {
                 property = properties[j];
-                tx.executeSql('INSERT INTO data (device_id, item, key, value) VALUES (?,?,?,?)',
+                tx.executeSql('INSERT INTO data (`device_id`, `item`, `key`, `value`) VALUES (?,?,?,?)',
                     [app.device_id, i, property, item[property]]);
             }
         }
@@ -106,12 +106,12 @@ app.updateDB = function (data) {
 
     var successDB = function () {
         app.report('app.updateDB - success!');
+        window.localStorage.setItem('update_id', data.update_id);
         app.fromDB();
     };
 
     app.report('app.updateDB');
     app.report('data.items.length: ' + data.items.length);
-    window.localStorage.setItem('update_id', data.update_id);
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
     db.transaction(populateDB, errorDB, successDB);
 
@@ -124,7 +124,7 @@ app.updateDB = function (data) {
 app.fromDB = function () {
 
     var queryDB = function () {
-        tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
+        tx.executeSql('SELECT `item`, `key`, `value` FROM data WHERE device_id=?', [app.device_id],
             querySuccess, errorDB);
     };
 
@@ -132,9 +132,13 @@ app.fromDB = function () {
         app.report('app.fromDB - Error processing SQL: ' + err.code);
     };
 
-    var querySuccess = function () {
+    var querySuccess = function (tx, results) {
         app.report('app.fromDB - success!');
-        app.report('Results length: ' + results.rows.length);
+        var len = results.rows.length;
+        app.report('Results length: ' + len);
+        for (var i = 0; i < len; i++) {
+            app.report('i: ' + i + ', type: ' + results.rows.item(i).type);
+        }
     };
 
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
