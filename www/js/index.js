@@ -1,4 +1,4 @@
-/*jslint debug: true, browser: true, devel: true */
+/*jslint plusplus: true, browser: true, devel: true */
 
 var app = {};
 
@@ -66,11 +66,9 @@ app.login = function () {
         timeout: 3000,
         success: function (data, status) {
             app.report('login success: ' + data.response);
-            if (data.response == 'account_id not found') {
+            if (data.response === 'account_id not found') {
                 app.report('app.login: ' + data.response);
-                return false;
-            }
-            else if (data.response != 'up to date') {
+            } else if (data.response !== 'up to date') {
                 app.updateDB(data);
             } else {
                 app.fromDB();
@@ -95,8 +93,8 @@ app.updateDB = function (data) {
         tx.executeSql('CREATE TABLE IF NOT EXISTS data ' +
             '(`id` integer primary key autoincrement, `device_id`, `item`, `key`, `value`)');
 
-        var item, properties, j, property;
-        for (var i = 0; i < data.items.length; i++) {
+        var i, item, properties, j, property;
+        for (i = 0; i < data.items.length; i++) {
             item = data.items[i];
             properties = Object.getOwnPropertyNames(item);
             for (j = 0; j < properties.length; j++) {
@@ -130,15 +128,6 @@ app.updateDB = function (data) {
  */
 app.fromDB = function () {
 
-    var queryDB = function (tx) {
-        tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
-            querySuccess, queryError);
-    };
-
-    var errorDB = function (err) {
-        app.report('app.fromDB - errorDB: ' + err.code + ', ' + err.message);
-    };
-
     var querySuccess = function (tx, results) {
         app.report('app.fromDB - success!');
         var len = results.rows.length;
@@ -164,6 +153,15 @@ app.fromDB = function () {
         app.report('app.fromDB - queryError: ' + err.code + ', ' + err.message);
     };
 
+    var queryDB = function (tx) {
+        tx.executeSql('SELECT * FROM data WHERE device_id=?', [app.device_id],
+            querySuccess, queryError);
+    };
+
+    var errorDB = function (err) {
+        app.report('app.fromDB - errorDB: ' + err.code + ', ' + err.message);
+    };
+
     app.report('app.fromDB');
     var db = window.openDatabase('data', '1.0', 'GranniePhone data', 1000000);
     db.transaction(queryDB, errorDB);
@@ -174,24 +172,23 @@ app.fromDB = function () {
 /**
  * Loop through app.items and draw items on the screen.
  */
-app.drawItems = function() {
+app.drawItems = function () {
     app.report('drawItems');
-    //document.body.innerHTML = '';
-    var itembox;
-    for (var i = 0; i < app.items.length; i++) {
+    var i, itembox;
+    for (i = 0; i < app.items.length; i++) {
         itembox = $('<div></div>');
         $(itembox).addClass('itembox itembox-' + i);
         $(itembox).attr('data-type', app.items.type);
         $(itembox).append('<p>' + app.items.type + '</p>');
         if (app.items.name) {
-            itembox.setAttribute('data-name', app.items.name);
+            $(itembox).attr('data-name', app.items.name);
             $(itembox).append('<p>' + app.items.name + '</p>');
         }
         if (app.items.number) {
-            itembox.setAttribute('data-numbername', app.items.numbername);
+            $(itembox).attr('data-numbername', app.items.numbername);
             $(itembox).append('<p>' + app.items.number + '</p>');
         }
-        $(body).append(itembox);
+        $('body').append(itembox);
     }
 };
 
