@@ -176,12 +176,12 @@ app.fromDB = function () {
  */
 app.drawItems = function() {
     app.report('drawItems');
-    document.body.innerHTML = '';
+    //document.body.innerHTML = '';
     var itembox;
     for (var i = 0; i < app.items.length; i++) {
-        itembox = document.createElement('div');
-        itembox.className = 'itembox itembox-' + i;
-        itembox.setAttribute('data-type', app.items.type);
+        itembox = $('<div></div>');
+        $(itembox).addClass('itembox itembox-' + i);
+        $(itembox).attr('data-type', app.items.type);
         $(itembox).append('<p>' + app.items.type + '</p>');
         if (app.items.name) {
             itembox.setAttribute('data-name', app.items.name);
