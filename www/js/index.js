@@ -191,6 +191,8 @@ app.drawItems = function () {
         }
         $('#console').append(itembox);
     }
+    var windowHeight = $(window).height();
+    $('.itembox').height(windowHeight/4);
 };
 
 
