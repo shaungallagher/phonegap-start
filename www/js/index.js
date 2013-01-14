@@ -15,6 +15,8 @@ app.bind = function () {
     console.log('bind');
     alert('bind');
 
+    $('#console').append('<p>testing jQuery</p>');
+
     app.deviceReadyDeferred = $.Deferred();
 
     app.jqmReadyDeferred = $.Deferred();
@@ -22,6 +24,7 @@ app.bind = function () {
     document.addEventListener("deviceReady", app.deviceIsReady, false);
 
     $(document).one("mobileinit", function () {
+        alert('jqmReadyDeferred.resolve');
         app.jqmReadyDeferred.resolve();
     });
 
