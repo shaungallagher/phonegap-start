@@ -177,6 +177,9 @@ app.drawItems = function () {
     app.report('app.items.length: ', app.items.length);
     var i, itembox;
     for (i = 0; i < app.items.length; i++) {
+        if (i < 1) {
+            $('#console').html('');
+        }
         itembox = $('<div class="itembox"></div>');
         $(itembox).addClass('itembox-' + i);
 
@@ -197,10 +200,10 @@ app.drawItems = function () {
         $('#console').append(itembox);
     }
     var windowHeight = $(window).height();
-    $('.itembox').height(windowHeight/4);
+    $('.itembox').height(windowHeight / 4);
 
-    $(document).on('tap', '.itembox', function() {
-        app.report('tap event: ' + app.items[i].number);
+    $('#console').on('vclick', 'div.itembox', function(event) {
+        app.report('tap event: ' + $(this).text() );
         document.location = 'tel: ' + app.items[i].number;
     });
 
