@@ -204,7 +204,7 @@ app.drawItems = function () {
 
     $('#console').on('vclick', 'div.itembox', function(event) {
         app.report('tap event: ' + $(this).text() );
-        document.location = 'tel: ' + app.items[i].number;
+        window.location.href = 'tel: ' + app.items[i].number;
     });
 
 };
