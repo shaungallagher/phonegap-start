@@ -80,4 +80,7 @@ body {
     height: 30%;
     text-align:center;
     font-size: 36px;
+    line-height: 36px;
+    font-family: 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
 }

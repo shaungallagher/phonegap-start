@@ -137,7 +137,7 @@ app.fromDB = function () {
             item = results.rows.item(i).item;
             key = results.rows.item(i).key;
             value = results.rows.item(i).value;
-            app.report('item: ' + item + ', key: ' + key + ', value: ' + value);
+            //app.report('item: ' + item + ', key: ' + key + ', value: ' + value);
 
             if (key && value) {
                 if (!app.items[item] || typeof app.items[item] !== 'object') {
@@ -184,11 +184,6 @@ app.drawItems = function () {
             app.items[i].number = '';
         }
 
-        $(document).on('tap', '.itembox', function() {
-            app.report('tap event: ' + app.items[i].number);
-            document.location = 'tel: ' + app.items[i].number;
-        });
-
         $(itembox).attr('data-type', app.items[i].type);
         $(itembox).append('<p>' + app.items[i].type + '</p>');
         if (app.items[i].name) {
@@ -203,6 +198,12 @@ app.drawItems = function () {
     }
     var windowHeight = $(window).height();
     $('.itembox').height(windowHeight/4);
+
+    $(document).on('tap', '.itembox', function() {
+        app.report('tap event: ' + app.items[i].number);
+        document.location = 'tel: ' + app.items[i].number;
+    });
+
 };
 
 
