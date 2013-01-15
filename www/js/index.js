@@ -184,8 +184,9 @@ app.drawItems = function () {
             app.items[i].number = '';
         }
 
-        $(itembox).bind('tap', function() {
-            window.location = 'tel: ' + app.items[i].number;
+        $(document).on('tap', '.itembox', function() {
+            app.report('tap event: ' + app.items[i].number);
+            document.location = 'tel: ' + app.items[i].number;
         });
 
         $(itembox).attr('data-type', app.items[i].type);
